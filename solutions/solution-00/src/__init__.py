@@ -2,6 +2,7 @@
 
 from flask import Flask
 from flask_cors import CORS
+from src.models.base import db
 
 cors = CORS()
 
@@ -20,12 +21,16 @@ def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
     register_routes(app)
     register_handlers(app)
 
+    with app.app_context():
+        db.create_all()
+
     return app
 
 
 def register_extensions(app: Flask) -> None:
     """Register the extensions for the Flask app"""
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
+    db.init_app(app)
     # Further extensions can be added here
 
 

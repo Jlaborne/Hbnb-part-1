@@ -2,15 +2,18 @@
 City related functionality
 """
 
-from src.models.base import Base
+from src.models.base import Base, db
 from src.models.country import Country
 
 
 class City(Base):
     """City representation"""
+    __tablename__ = 'cities'
 
-    name: str
-    country_code: str
+    name = db.Column(db.String(120), nullable=False)
+    country_code = db.Column(db.String(2), db.ForeignKey('countries.code'), nullable=False)
+    places = db.relationship('Place', backref='city', lazy=True)
+    
 
     def __init__(self, name: str, country_code: str, **kw) -> None:
         """Dummy init"""

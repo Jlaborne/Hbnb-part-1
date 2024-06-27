@@ -2,25 +2,26 @@
 Place related functionality
 """
 
-from src.models.base import Base
+from src.models.base import Base, db
 from src.models.city import City
 from src.models.user import User
 
 
 class Place(Base):
     """Place representation"""
+    __tablename__ = 'places'
 
-    name: str
-    description: str
-    address: str
-    latitude: float
-    longitude: float
-    host_id: str
-    city_id: str
-    price_per_night: int
-    number_of_rooms: int
-    number_of_bathrooms: int
-    max_guests: int
+    name = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.String(1024), nullable=True)
+    number_rooms = db.Column(db.Integer, nullable=False, default=0)
+    number_bathrooms = db.Column(db.Integer, nullable=False, default=0)
+    max_guest = db.Column(db.Integer, nullable=False, default=0)
+    price_per_night = db.Column(db.Integer, nullable=False, default=0)
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    city_id = db.Column(db.String(36), db.ForeignKey('cities.id'), nullable=False)
+    reviews = db.relationship('Review', back_populates='place')
 
     def __init__(self, data: dict | None = None, **kw) -> None:
         """Dummy init"""

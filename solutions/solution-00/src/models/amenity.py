@@ -2,13 +2,14 @@
 Amenity related functionality
 """
 
-from src.models.base import Base
+from src.models.base import Base, db
 
 
 class Amenity(Base):
     """Amenity representation"""
+    __tablename__ = 'amenitys'
 
-    name: str
+    name = db.Column(db.String(120), nullable=False)
 
     def __init__(self, name: str, **kw) -> None:
         """Dummy init"""
@@ -60,9 +61,10 @@ class Amenity(Base):
 
 class PlaceAmenity(Base):
     """PlaceAmenity representation"""
+    __tablename__ = 'placeamenitys'
 
-    place_id: str
-    amenity_id: str
+    place_id = db.Column(db.String(120), nullable=False)
+    amenity_id = db.Column(db.String(120), nullable=False)
 
     def __init__(self, place_id: str, amenity_id: str, **kw) -> None:
         """Dummy init"""

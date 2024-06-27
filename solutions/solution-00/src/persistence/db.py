@@ -12,9 +12,15 @@
     - reload (which can be empty)
 """
 
-from src.models.base import Base
+from src.models.base import Base, db
 from src.persistence.repository import Repository
-
+from src.models.amenity import Amenity, PlaceAmenity
+from src.models.city import City
+from src.models.country import Country
+from src.models.place import Place
+from src.models.review import Review
+from src.models.user import User
+from utils.populate import populate_db
 
 class DBRepository(Repository):
     """Dummy DB repository"""
@@ -24,20 +30,44 @@ class DBRepository(Repository):
 
     def get_all(self, model_name: str) -> list:
         """Not implemented"""
-        return []
+        model_class = self._get_model_class(model_name)
+        return model_class.query.all()
 
     def get(self, model_name: str, obj_id: str) -> Base | None:
         """Not implemented"""
+        model_class = self._get_model_class(model_name)
+        return model_class.query.get(obj_id)
 
     def reload(self) -> None:
         """Not implemented"""
+        populate_db(self)
 
     def save(self, obj: Base) -> None:
         """Not implemented"""
+        db.session.add(obj)
+        db.session.commit()
 
     def update(self, obj: Base) -> Base | None:
         """Not implemented"""
+        db.session.merge(obj)
+        db.session.commit()
+        return obj
 
     def delete(self, obj: Base) -> bool:
         """Not implemented"""
-        return False
+        db.session.delete(obj)
+        db.session.commit()
+        return True
+
+    def _get_model_class(self, model_name: str) -> type[Base]:
+        """Helper method to get model class by name"""
+        models = {
+            "amenity": Amenity,
+            "city": City,
+            "country": Country,
+            "place": Place,
+            "placeamenity": PlaceAmenity,
+            "review": Review,
+            "user": User,
+        }
+        return models[model_name]

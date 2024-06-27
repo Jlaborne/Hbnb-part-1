@@ -4,16 +4,19 @@ from datetime import datetime
 from typing import Any, Optional
 import uuid
 from abc import ABC, abstractmethod
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
 
-class Base(ABC):
+class Base(db.Model):
     """
     Base Interface for all models
     """
+    __abstract__ = True
 
-    id: str
-    created_at: datetime
-    updated_at: datetime
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __init__(
         self,
