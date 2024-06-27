@@ -22,11 +22,17 @@ from src.models.review import Review
 from src.models.user import User
 from utils.populate import populate_db
 
+
 class DBRepository(Repository):
     """Dummy DB repository"""
 
     def __init__(self) -> None:
-        """Not implemented"""
+        """Call reload method"""
+        # 1- Peuple la bd
+        populate_db(self)
+        db.session.commit()
+        # 2- Raffraichis
+        self.reload()
 
     def get_all(self, model_name: str) -> list:
         """Not implemented"""
@@ -40,7 +46,7 @@ class DBRepository(Repository):
 
     def reload(self) -> None:
         """Not implemented"""
-        populate_db(self)
+        db.session.flush()
 
     def save(self, obj: Base) -> None:
         """Not implemented"""

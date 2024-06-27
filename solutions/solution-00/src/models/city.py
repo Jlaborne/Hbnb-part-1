@@ -12,8 +12,8 @@ class City(Base):
 
     name = db.Column(db.String(120), nullable=False)
     country_code = db.Column(db.String(2), db.ForeignKey('countries.code'), nullable=False)
-    places = db.relationship('Place', backref='city', lazy=True)
-    
+    # Voire si utile (TODO)
+    # places = db.relationship('Place', backref='city', lazy=True)
 
     def __init__(self, name: str, country_code: str, **kw) -> None:
         """Dummy init"""

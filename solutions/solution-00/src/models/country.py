@@ -1,7 +1,8 @@
 """
 Country related functionality
 """
-from src.models.base import Base, db
+from src.models.base import db
+
 
 class Country(db.Model):
     """
@@ -13,7 +14,6 @@ class Country(db.Model):
     """
     __tablename__ = 'countries'
 
-    
     name = db.Column(db.String(255), nullable=False)
     code = db.Column(db.String(2), primary_key=True)
 

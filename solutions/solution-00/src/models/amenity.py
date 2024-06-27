@@ -61,7 +61,7 @@ class Amenity(Base):
 
 class PlaceAmenity(Base):
     """PlaceAmenity representation"""
-    __tablename__ = 'placeamenitys'
+    __tablename__ = 'placeamenities'
 
     place_id = db.Column(db.String(120), nullable=False)
     amenity_id = db.Column(db.String(120), nullable=False)

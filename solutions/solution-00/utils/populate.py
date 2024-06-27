@@ -9,9 +9,14 @@ def populate_db(repo: Repository) -> None:
 
     countries = [
         Country(name="Uruguay", code="UY"),
+        Country(name="France", code="FR"),
+        Country(name="USA", code="US"),
+        Country(name="Espagne", code="ES"),
+        Country(name="Canada", code="CA"),
     ]
 
     for country in countries:
-        repo.save(country)
+        if (repo.get("country", country.code) is None):
+            repo.save(country)
 
     print("Memory DB populated")

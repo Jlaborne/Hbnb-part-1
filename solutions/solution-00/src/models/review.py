@@ -11,14 +11,13 @@ class Review(Base):
     """Review representation"""
     __tablename__ = 'reviews'
 
-    
     place_id = db.Column(db.String(36), db.ForeignKey('places.id'), nullable=False)
     user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
     comment = db.Column(db.String(255), nullable=False)
     rating = db.Column(db.Float, nullable=False)
-
-    user = db.relationship('User', back_populates='reviews')
-    place = db.relationship('Place', back_populates='reviews')
+    # Voire si utile (TODO)
+    # user = db.relationship('User', back_populates='reviews')
+    # place = db.relationship('Place', back_populates='reviews')
 
     def __init__(
         self, place_id: str, user_id: str, comment: str, rating: float, **kw

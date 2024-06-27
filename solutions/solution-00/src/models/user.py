@@ -4,6 +4,7 @@ User related functionality
 
 from src.models.base import Base, db
 
+
 class User(Base):
     """User representation"""
     __tablename__ = 'users'
@@ -11,9 +12,9 @@ class User(Base):
     email = db.Column(db.String(120), unique=True, nullable=False)
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
-    places = db.relationship('Place', backref='user', lazy=True)
-    reviews = db.relationship('Review', back_populates='user')
-    
+    # Voire si utile (TODO)
+    # places = db.relationship('Place', backref='user', lazy=True)
+    # reviews = db.relationship('Review', back_populates='user')
 
     def __init__(self, email: str, first_name: str, last_name: str, **kw):
         """Dummy init"""
