@@ -76,3 +76,7 @@ To run the solution first install the requirements with `pip install -r requirem
 - Run the `manage.py` file with the command `python manage.py run` and specify flags like `--port {port} --host {host}` if you want to run it in a different port or host.
 - Run the `hbnb.py`. This file calls a function before running the app that will populate the database with some data.
 - Build and run the Dockerfile.
+
+- `REPOSITORY=db CONFIG=development python3 manage.py run`: to run the app with the SQLite database hbnb_dev.db
+- `REPOSITORY=db CONFIG=production python3 manage.py run` : to run the app with the PSQL database hbnb_prod
+- `python3 manage.py create_db`: to create the database

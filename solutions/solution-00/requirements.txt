@@ -2,3 +2,8 @@ flask
 flask-cors
 
 gunicorn
+
+SQLAlchemy
+Flask-SQLAlchemy
+psycopg2-binary
+Flask-JWT-Extended
