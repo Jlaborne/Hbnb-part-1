@@ -3,11 +3,13 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
+from flask_bcrypt import Bcrypt
 
 cors = CORS()
-
 db = SQLAlchemy()
-
+jwt = JWTManager()
+bcrypt = Bcrypt()
 
 def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
     """
@@ -18,13 +20,15 @@ def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
     app.url_map.strict_slashes = False
 
     app.config.from_object(config_class)
+    """
+    config_name = 'src.config.DevelopmentConfig' if os.getenv(ENV_VAR) == 'development' else 'src.config.ProductionConfig'
+    app.config.from_object(config_name)
+    """
+    print(f"Using database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
     register_extensions(app)
     register_routes(app)
     register_handlers(app)
-
-    with app.app_context():
-        db.create_all()
 
     return app
 
@@ -33,6 +37,8 @@ def register_extensions(app: Flask) -> None:
     """Register the extensions for the Flask app"""
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
     db.init_app(app)
+    jwt.init_app(app)
+    bcrypt.init_app(app)
     # Further extensions can be added here
 
 

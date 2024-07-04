@@ -4,6 +4,9 @@ Users controller module
 
 from flask import abort, request
 from src.models.user import User
+from flask import jsonify
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required
 
 
 def get_users():
@@ -54,10 +57,22 @@ def update_user(user_id: str):
 
     return user.to_dict(), 200
 
-
+@jwt_required()
 def delete_user(user_id: str):
     """Deletes a user by ID"""
     if not User.delete(user_id):
         abort(404, f"User with ID {user_id} not found")
 
     return "", 204
+
+def login ():
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+    
+    user = User.get_by_email(email)
+    if user is None or not user.check_password(password):
+        return jsonify({"msg": "Bad email or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)

@@ -27,12 +27,9 @@ class DBRepository(Repository):
     """Dummy DB repository"""
 
     def __init__(self) -> None:
-        """Call reload method"""
-        # 1- Peuple la bd
-        populate_db(self)
-        db.session.commit()
-        # 2- Raffraichis
-        self.reload()
+        if self.is_db_empty():
+            populate_db(self)
+            db.session.commit()
 
     def get_all(self, model_name: str) -> list:
         """Not implemented"""
@@ -77,3 +74,10 @@ class DBRepository(Repository):
             "user": User,
         }
         return models[model_name]
+
+    def is_db_empty(self) -> bool:
+        """Check if the database is empty."""
+        # Check if key tables are empty. Adjust according to your models.
+        user_count = db.session.query(Country).count()
+        # Add similar checks for other key tables if necessary
+        return user_count == 0

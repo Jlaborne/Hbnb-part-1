@@ -18,6 +18,7 @@ def create_unique_user():
         "email": unique_email,
         "first_name": "Test",
         "last_name": "User",
+        "password": "123"
     }
     response = requests.post(f"{API_URL}/users", json=new_user)
     assert (

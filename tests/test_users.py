@@ -18,6 +18,7 @@ def create_unique_user():
         "email": unique_email,
         "first_name": "Test",
         "last_name": "User",
+        "password": "password123"
     }
     response = requests.post(f"{API_URL}/users", json=new_user)
     assert (
@@ -52,6 +53,7 @@ def test_post_user():
         "email": unique_email,
         "first_name": "John",
         "last_name": "Doe",
+        "password": "password123"
     }
     response = requests.post(f"{API_URL}/users", json=new_user)
     assert (
@@ -110,6 +112,7 @@ def test_put_user():
         "email": f"updated.user.{uuid.uuid4()}@example.com",
         "first_name": "John",
         "last_name": "Smith",
+        "password": "newpassword"
     }
     response = requests.put(f"{API_URL}/users/{user_id}", json=updated_user)
     assert (
@@ -137,9 +140,27 @@ def test_delete_user():
     response status is 204 indicating successful deletion.
     """
     user_id = create_unique_user()
+    unique_email = f"test.user.{uuid.uuid4()}@example.com"
+    new_user = {
+        "email": unique_email,
+        "first_name": "John",
+        "last_name": "Doe",
+        "password": "dele_test"
+    }
+    response = requests.post(f"{API_URL}/users", json=new_user)
+    credentials = {
+        "email": unique_email,
+        "password": "dele_test"
+    }
+    response = requests.post(f"{API_URL}/users/login", json=credentials)
+    assert (
+        response.status_code == 200
+    ), f"Login failed. Expected status code 200 but got {response.status_code}. Response: {response.text}"
+    token = response.json()["access_token"]
 
     # Delete the newly created user
-    response = requests.delete(f"{API_URL}/users/{user_id}")
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.delete(f"{API_URL}/users/{user_id}", headers=headers)
     assert (
         response.status_code == 204
     ), f"Expected status code 204 but got {response.status_code}. Response: {response.text}"

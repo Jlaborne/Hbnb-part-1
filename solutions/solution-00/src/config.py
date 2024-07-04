@@ -9,6 +9,7 @@ This module exports configuration classes for the Flask application.
 
 from abc import ABC
 import os
+from datetime import timedelta
 
 
 class Config(ABC):
@@ -43,6 +44,9 @@ class DevelopmentConfig(Config):
         "DATABASE_URL", "sqlite:///hbnb_dev.db")
     DEBUG = True
 
+    JWT_SECRET_KEY = 'super-secret'  # Change this to your preferred secret key
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)  # Token expiration time
+
 
 class TestingConfig(Config):
     """
@@ -63,6 +67,9 @@ class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
 
+    JWT_SECRET_KEY = 'super-secret'  # Change this to your preferred secret key
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)  # Token expiration time
+
 
 class ProductionConfig(Config):
     """
@@ -78,5 +85,8 @@ class ProductionConfig(Config):
 
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "postgresql://user:password@localhost/hbnb_prod"
+        "postgresql://hbnbuser:hbnb@localhost/hbnb_prod"
     )
+
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'super-secret-prod')  # Change this to your production secret key
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=1)  # Token expiration time for production

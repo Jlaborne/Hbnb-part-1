@@ -4,6 +4,7 @@ Places controller module
 
 from flask import abort, request
 from src.models.place import Place
+from flask_jwt_extended import jwt_required
 
 
 def get_places():

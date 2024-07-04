@@ -16,7 +16,6 @@ def populate_db(repo: Repository) -> None:
     ]
 
     for country in countries:
-        if (repo.get("country", country.code) is None):
             repo.save(country)
 
     print("Memory DB populated")
